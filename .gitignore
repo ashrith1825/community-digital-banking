@@ -1,0 +1,25 @@
+# ═══ Backend ═══
+backend/target/
+*.class
+*.jar
+*.war
+*.log
+.idea/
+*.iml
+
+# ═══ Frontend ═══
+frontend/node_modules/
+frontend/dist/
+frontend/.cache/
+
+# ═══ Environment ═══
+.env
+.env.local
+*.env
+
+# ═══ OS ═══
+.DS_Store
+Thumbs.db
+
+# ═══ Docker ═══
+mysql-data/

@@ -1,0 +1,56 @@
+# ═══════════════════════════════════════════════════════════
+# Docker Compose – Full Stack (Backend + Frontend + MySQL)
+# ═══════════════════════════════════════════════════════════
+# Run:  docker-compose up --build
+# ═══════════════════════════════════════════════════════════
+
+version: '3.8'
+
+services:
+  # ── MySQL Database ──
+  mysql:
+    image: mysql:8.0
+    container_name: banking-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-root}
+      MYSQL_DATABASE: digital_banking
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── Spring Boot Backend ──
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: banking-backend
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/digital_banking?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-root}
+      JWT_SECRET: ${JWT_SECRET:-d2FsbGV0LXBsYXRmb3JtLXNlY3VyZS1rZXktZm9yLWp3dC10b2tlbi1nZW5lcmF0aW9uLTIwMjY=}
+    ports:
+      - "8080:8080"
+
+  # ── React Frontend (via Nginx) ──
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: banking-frontend
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+
+volumes:
+  mysql-data:
