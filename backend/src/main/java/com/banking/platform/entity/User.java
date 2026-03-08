@@ -32,6 +32,10 @@ public class User {
     @Column(nullable = false, length = 20, columnDefinition = "VARCHAR(20)")
     private Role role;
 
+    @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT TRUE")
+    @Builder.Default
+    private Boolean active = true;
+    
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Account account;
 
