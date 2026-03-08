@@ -7,6 +7,8 @@ export default function RegisterPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [accountNumber, setAccountNumber] = useState('');
+  const [initialBalance, setInitialBalance] = useState('');
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const { register } = useAuth();
@@ -16,7 +18,9 @@ export default function RegisterPage() {
     fullName.trim().length >= 2 &&
     email.trim() !== '' &&
     password.length >= 8 &&
-    password === confirmPassword;
+    password === confirmPassword &&
+    accountNumber.trim().length >= 6 &&
+    Number(initialBalance) > 0;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -27,7 +31,7 @@ export default function RegisterPage() {
     }
     setSubmitting(true);
     try {
-      await register(fullName, email, password);
+      await register(fullName, email, password, accountNumber, Number(initialBalance));
       navigate('/dashboard');
     } catch (err) {
       setError(err.response?.data?.message || 'Registration failed. Please try again.');
@@ -100,6 +104,33 @@ export default function RegisterPage() {
               placeholder="Re-enter password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+            />
+          </div>
+
+          <div>
+            <label htmlFor="accountNumber" className="block text-sm font-medium text-gray-700 mb-1">Account Number</label>
+            <input
+              id="accountNumber"
+              type="text"
+              className="input-field"
+              placeholder="e.g. 1000000099"
+              value={accountNumber}
+              onChange={(e) => setAccountNumber(e.target.value.replace(/\D/g, ''))}
+              required
+            />
+          </div>
+
+          <div>
+            <label htmlFor="initialBalance" className="block text-sm font-medium text-gray-700 mb-1">Initial Balance (₹)</label>
+            <input
+              id="initialBalance"
+              type="number"
+              className="input-field"
+              placeholder="e.g. 10000"
+              min="1"
+              value={initialBalance}
+              onChange={(e) => setInitialBalance(e.target.value)}
               required
             />
           </div>

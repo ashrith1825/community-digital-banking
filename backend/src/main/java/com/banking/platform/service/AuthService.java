@@ -51,10 +51,16 @@ public class AuthService {
                 .build();
         user = userRepository.save(user);
 
-        // 2. Create digital wallet (account) with ₹10,000 simulated opening balance
+        // 2. Create digital wallet with user-specified or default ₹10,000 opening balance
+        String acctNumber = (request.getAccountNumber() != null && !request.getAccountNumber().isBlank())
+                ? request.getAccountNumber()
+                : generateAccountNumber();
+        BigDecimal balance = (request.getInitialBalance() != null && request.getInitialBalance() > 0)
+                ? BigDecimal.valueOf(request.getInitialBalance())
+                : new BigDecimal("10000.00");
         Account account = Account.builder()
-                .accountNumber(generateAccountNumber())
-                .balance(new BigDecimal("10000.00"))
+                .accountNumber(acctNumber)
+                .balance(balance)
                 .user(user)
                 .build();
         account = accountRepository.save(account);
