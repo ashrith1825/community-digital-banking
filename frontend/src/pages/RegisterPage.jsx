@@ -7,7 +7,6 @@ export default function RegisterPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [accountNumber, setAccountNumber] = useState('');
   const [initialBalance, setInitialBalance] = useState('');
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
@@ -18,9 +17,7 @@ export default function RegisterPage() {
     fullName.trim().length >= 2 &&
     email.trim() !== '' &&
     password.length >= 8 &&
-    password === confirmPassword &&
-    accountNumber.trim().length >= 6 &&
-    Number(initialBalance) > 0;
+    password === confirmPassword;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -31,7 +28,7 @@ export default function RegisterPage() {
     }
     setSubmitting(true);
     try {
-      await register(fullName, email, password, accountNumber, Number(initialBalance));
+      await register(fullName, email, password, initialBalance ? Number(initialBalance) : undefined);
       navigate('/dashboard');
     } catch (err) {
       setError(err.response?.data?.message || 'Registration failed. Please try again.');
@@ -109,20 +106,9 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label htmlFor="accountNumber" className="block text-sm font-medium text-gray-700 mb-1">Account Number</label>
-            <input
-              id="accountNumber"
-              type="text"
-              className="input-field"
-              placeholder="e.g. 1000000099"
-              value={accountNumber}
-              onChange={(e) => setAccountNumber(e.target.value.replace(/\D/g, ''))}
-              required
-            />
-          </div>
-
-          <div>
-            <label htmlFor="initialBalance" className="block text-sm font-medium text-gray-700 mb-1">Initial Balance (₹)</label>
+            <label htmlFor="initialBalance" className="block text-sm font-medium text-gray-700 mb-1">
+              Initial Balance (₹) <span className="text-gray-400 font-normal">— optional, defaults to ₹10,000</span>
+            </label>
             <input
               id="initialBalance"
               type="number"
@@ -131,7 +117,6 @@ export default function RegisterPage() {
               min="1"
               value={initialBalance}
               onChange={(e) => setInitialBalance(e.target.value)}
-              required
             />
           </div>
 
