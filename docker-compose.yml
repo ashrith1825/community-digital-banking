@@ -27,8 +27,8 @@ services:
   # ── Spring Boot Backend ──
   backend:
     build:
-      context: .
-      dockerfile: Dockerfile.backend
+      context: ./backend
+      dockerfile: Dockerfile
     container_name: banking-backend
     depends_on:
       mysql:
