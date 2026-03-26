@@ -6,3 +6,4 @@
 -- database and breaks every INSERT. Make it nullable so legacy rows are not rejected.
 -- Safe to run on every startup; continue-on-error=true handles fresh DBs where it won't exist.
 ALTER TABLE users MODIFY COLUMN password VARCHAR(255) NULL DEFAULT NULL;
+ALTER TABLE users MODIFY COLUMN username VARCHAR(255) NULL DEFAULT NULL;
