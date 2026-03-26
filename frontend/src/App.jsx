@@ -19,22 +19,21 @@ export default function App() {
   const { isAuthenticated } = useAuth();
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen w-full bg-gradient-to-br from-primary-50 via-white to-primary-100 animate-fadeInUp">
       {isAuthenticated && <Navbar />}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+      {/* Full width container */}
+      <main className="w-full px-4 sm:px-6 lg:px-10 py-10 md:py-14">
         <Routes>
-          {/* Public routes */}
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
 
-          {/* Protected routes */}
           <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
           <Route path="/transfer" element={<PrivateRoute><TransferPage /></PrivateRoute>} />
           <Route path="/history" element={<PrivateRoute><TransactionHistory /></PrivateRoute>} />
           <Route path="/insights" element={<PrivateRoute><InsightsPage /></PrivateRoute>} />
           <Route path="/literacy" element={<PrivateRoute><LiteracyPage /></PrivateRoute>} />
 
-          {/* Default redirect */}
           <Route path="*" element={<Navigate to={isAuthenticated ? '/dashboard' : '/login'} replace />} />
         </Routes>
       </main>
