@@ -76,7 +76,8 @@ public class SecurityConfig {
         config.setAllowedOrigins(List.of(
             "http://localhost:5173",
             "http://localhost:3000",
-            "https://community-digital-banking-gq4c.vercel.app"
+            "https://community-digital-banking-gq4c.vercel.app",
+            "https://ashrithreddyc17.vercel.app"
         ));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
